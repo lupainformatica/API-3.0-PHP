@@ -50,6 +50,16 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     const DISCOVER = 'Discover';
 
     /**
+     * Tipo de Cartão Creditcard
+     */
+    const CARD_TYPE_CREDIT = 'Creditcard';
+
+    /**
+     * Tipo de Cartão DebitCard
+     */
+    const CARD_TYPE_DEBIT = 'DebitCard';
+
+    /**
      * Bandeira Hipercard
      */
     const HIPERCARD = 'Hipercard';
@@ -80,6 +90,11 @@ class CreditCard implements \JsonSerializable, CieloSerializable
 
     /** @var \stdClass $links */
     private $links;
+
+    /**
+     * @var \stdClass $cardType
+     */
+    private $cardType;
 
     /**
      * @param string $json
@@ -289,5 +304,25 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     public function setLinks($links)
     {
         $this->links = $links;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCardType()
+    {
+        return $this->cardType;
+    }
+
+    /**
+     * @param $cardType
+     *
+     * @return $this
+     */
+    public function setCardType($cardType)
+    {
+        $this->cardType = $cardType;
+
+        return $this;
     }
 }

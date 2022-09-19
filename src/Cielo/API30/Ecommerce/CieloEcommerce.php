@@ -7,6 +7,7 @@ use Cielo\API30\Ecommerce\Request\QueryRecurrentPaymentRequest;
 use Cielo\API30\Ecommerce\Request\QuerySaleRequest;
 use Cielo\API30\Ecommerce\Request\TokenizeCardRequest;
 use Cielo\API30\Ecommerce\Request\UpdateSaleRequest;
+use Cielo\API30\Ecommerce\Request\ZeroAuthRequest;
 use Cielo\API30\Merchant;
 use Psr\Log\LoggerInterface;
 
@@ -22,17 +23,17 @@ class CieloEcommerce
 
     private $logger;
 
-	/**
-	 * Create an instance of CieloEcommerce choosing the environment where the
-	 * requests will be send
-	 *
-	 * @param Merchant $merchant
-	 *            The merchant credentials
-	 * @param Environment environment
-	 *            The environment: {@link Environment::production()} or
-	 *            {@link Environment::sandbox()}
-	 * @param LoggerInterface|null $logger
-	 */
+    /**
+     * Create an instance of CieloEcommerce choosing the environment where the
+     * requests will be send
+     *
+     * @param Merchant $merchant
+     *            The merchant credentials
+     * @param Environment environment
+     *            The environment: {@link Environment::production()} or
+     *            {@link Environment::sandbox()}
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(Merchant $merchant, Environment $environment = null, LoggerInterface $logger = null)
     {
         if ($environment == null) {
@@ -175,5 +176,17 @@ class CieloEcommerce
         $tokenizeCardRequest = new TokenizeCardRequest($this->merchant, $this->environment, $this->logger);
 
         return $tokenizeCardRequest->execute($card);
+    }
+
+    /**
+     * @param CreditCard $card
+     *
+     * @return ZeroAuth
+     */
+    public function zeroAuth(CreditCard $card)
+    {
+        $zeroAuthRequest = new ZeroAuthRequest($this->merchant, $this->environment, $this->logger);
+
+        return $zeroAuthRequest->execute($card);
     }
 }

@@ -8,9 +8,9 @@ use Cielo\API30\Merchant;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CreateZeroAuthHandler
+ * Class ZeroAuthRequest
  *
- * @package AppBundle\Handler\Cielo
+ * @package Cielo\API30\Ecommerce\Request
  */
 class ZeroAuthRequest extends AbstractRequest
 {
@@ -25,7 +25,7 @@ class ZeroAuthRequest extends AbstractRequest
     private $merchant;
 
     /**
-     * CreateZeroAuthHandler constructor.
+     * ZeroAuthRequest constructor.
      *
      * @param Merchant $merchant
      * @param Environment $environment

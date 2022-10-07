@@ -29,7 +29,7 @@ class CieloRequestException extends \Exception
      */
     public function getCieloError()
     {
-        return $this->cieloError;
+        return ($this->cieloError) ? $this->cieloError : new CieloError($this->getMessage(), $this->getCode());
     }
 
     /**

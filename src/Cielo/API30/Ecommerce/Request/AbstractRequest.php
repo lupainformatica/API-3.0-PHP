@@ -16,12 +16,12 @@ abstract class AbstractRequest
     private $merchant;
     private $logger;
 
-	/**
-	 * AbstractSaleRequest constructor.
-	 *
-	 * @param Merchant $merchant
-	 * @param LoggerInterface|null $logger
-	 */
+    /**
+     * AbstractSaleRequest constructor.
+     *
+     * @param Merchant $merchant
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(Merchant $merchant, LoggerInterface $logger = null)
     {
         $this->merchant = $merchant;
@@ -61,6 +61,11 @@ abstract class AbstractRequest
         curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
+        if (strpos($url, 'sandbox.cieloecommerce')) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
+        }
+
         switch ($method) {
             case 'GET':
                 break;
@@ -84,11 +89,10 @@ abstract class AbstractRequest
 
         if ($this->logger !== null) {
             $this->logger->debug('Requisição', [
-                    sprintf('%s %s', $method, $url),
-                    $headers,
-                    json_decode(preg_replace('/("cardnumber"):"([^"]{6})[^"]+([^"]{4})"/i', '$1:"$2******$3"', json_encode($content)))
-                ]
-            );
+                sprintf('%s %s', $method, $url),
+                $headers,
+                json_decode(preg_replace('/("cardnumber"):"([^"]{6})[^"]+([^"]{4})"/i', '$1:"$2******$3"', json_encode($content)))
+            ]);
         }
 
         $response   = curl_exec($curl);
@@ -104,7 +108,9 @@ abstract class AbstractRequest
         if (curl_errno($curl)) {
             $message = sprintf('cURL error[%s]: %s', curl_errno($curl), curl_error($curl));
 
-            $this->logger->error($message);
+            if ($this->logger !== null) {
+                $this->logger->error($message);
+            }
 
             throw new \RuntimeException($message);
         }
